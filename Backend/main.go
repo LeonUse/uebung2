@@ -12,6 +12,7 @@ func handleRequests() {
 	r := mux.NewRouter().StrictSlash(true)
 	r.Methods("OPTIONS").HandlerFunc(HandleOptions)
 	r.HandleFunc("/createPoll", createPoll).Methods("POST")
+	r.HandleFunc("/getPoll/{id}", getPoll).Methods("GET")
 	r.Walk(func(route *mux.Route, router *mux.Router, ancestors []*mux.Route) error {
 		t, _ := route.GetPathTemplate()
 		m, _ := route.GetMethods()

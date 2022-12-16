@@ -10,6 +10,7 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import { useParams } from "react-router";
+import axios from "axios";
 
 ChartJS.register(
   CategoryScale,
@@ -29,28 +30,46 @@ export const options = {
   },
 };
 
-const labels = ["Option1", "Option2", "Option3"];
+const votes = [10, 10, 30];
 
-const option1 = [10, 10, 30];
-
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: "Option 1",
-      data: option1,
-      backgroundColor: "rgba(255, 99, 132, 0.5)",
-    },
-  ],
-};
-
-export default function Poll() {
+export default function activePoll() {
   const { id } = useParams();
+  const [poll, setPoll] = React.useState<Poll>({
+    id: "",
+    poll: "",
+    Options: [""],
+  });
+  React.useEffect(() => {
+    getPollData();
+  }, []);
+
+  React.useEffect(() => {
+    console.log("🚀 ~ file: activePoll.tsx:43 ~ activePoll ~ options", options);
+  }, [options]);
+
+  function getPollData() {
+    axios.get("http://localhost:9000/getPoll/" + id).then((response: any) => {
+      setPoll(response.data);
+    });
+  }
+
+  const data = {
+    labels: poll.Options,
+    datasets: [
+      {
+        label: "Votes",
+        data: votes,
+        backgroundColor: "rgba(255, 99, 132, 0.5)",
+      },
+    ],
+  };
+
   return (
     <>
-      <div className="activePoll">
+      <div className="center">
         <h1>Link to VOTE: http://localhost:5173/vote/{id}</h1>
-        <h1>Poll Question</h1>
+        <br />
+        <h1>{poll.poll}</h1>
       </div>
       <div className="barCss">
         <Bar options={options} data={data} />

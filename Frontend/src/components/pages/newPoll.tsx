@@ -24,10 +24,6 @@ export default function NewPoll() {
       console.log("handleCangeOption", index);
     };
 
-  const handleChangeOption1 = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setOptions([event.target.value]);
-  };
-
   const addOption = () => {
     let a = [""];
     setOptions((oldArray) => [...oldArray, ""]);
